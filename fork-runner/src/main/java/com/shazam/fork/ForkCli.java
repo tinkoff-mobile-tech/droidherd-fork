@@ -104,6 +104,13 @@ public class ForkCli {
                     .withPoolingStrategy(forkConfiguration.poolingStrategy)
                     .withAutoGrantPermissions(forkConfiguration.autoGrantPermissions)
                     .withExcludedAnnotation(forkConfiguration.excludedAnnotation)
+                    .withClientType("fork-cli")
+                    .withEmulatorParameters(forkConfiguration.emulatorParameters)
+                    .withAdbUsageType(forkConfiguration.adbUsageType)
+                    .withMinimumRequiredEmulators(forkConfiguration.minimumRequiredEmulators)
+                    .withDroidherdAuthProviderType(forkConfiguration.droidherdAuthProviderType)
+                    .withEmulators(forkConfiguration.emulators)
+                    .withEmulatorFarmEndpoint(forkConfiguration.emulatorFarmEndpoint)
                     .build();
 
             Fork fork = new Fork(configuration);

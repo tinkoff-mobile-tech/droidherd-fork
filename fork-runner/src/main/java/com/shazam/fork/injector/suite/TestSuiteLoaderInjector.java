@@ -10,7 +10,9 @@
 
 package com.shazam.fork.injector.suite;
 
+import com.shazam.fork.suite.CachedTestsLoader;
 import com.shazam.fork.suite.TestSuiteLoader;
+import com.shazam.fork.suite.TestsLoader;
 
 import static com.shazam.fork.injector.ConfigurationInjector.configuration;
 import static com.shazam.fork.injector.io.DexFileExtractorInjector.dexFileExtractor;
@@ -20,7 +22,9 @@ public class TestSuiteLoaderInjector {
 
     private TestSuiteLoaderInjector() {}
 
-    public static TestSuiteLoader testSuiteLoader() {
-        return new TestSuiteLoader(configuration().getInstrumentationApk(), dexFileExtractor(), testClassMatcher(), configuration().getExcludedAnnotation());
+    public static TestsLoader testSuiteLoader() {
+        return new CachedTestsLoader(
+                new TestSuiteLoader(configuration().getInstrumentationApk(), dexFileExtractor(), testClassMatcher(), configuration().getExcludedAnnotation())
+        );
     }
 }

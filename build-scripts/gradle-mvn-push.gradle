@@ -28,7 +28,6 @@ def isCI() {
 }
 
 java {
-    withJavadocJar()
     withSourcesJar()
 }
 

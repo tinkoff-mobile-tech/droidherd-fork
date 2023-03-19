@@ -12,16 +12,26 @@
  */
 package com.shazam.fork.injector.system;
 
+import com.shazam.fork.Configuration;
 import com.shazam.fork.system.adb.Adb;
+import com.shazam.fork.system.adb.AdbInterface;
+import com.shazam.fork.system.adb.DroidherdAdb;
 
 import static com.shazam.fork.injector.ConfigurationInjector.configuration;
 
 public class AdbInjector {
-    private static final Adb ADB = new Adb(configuration().getAndroidSdk());
+    private static final AdbInterface ADB = createInstance(configuration());
 
     private AdbInjector() {}
 
-    public static Adb adb() {
+    public static AdbInterface adb() {
         return ADB;
+    }
+
+    private static AdbInterface createInstance(Configuration configuration) {
+        if (configuration.getAdbUsageType() == AdbInterface.Type.Droidherd) {
+            return new DroidherdAdb(configuration.getAndroidSdk());
+        }
+        return new Adb(configuration.getAndroidSdk());
     }
 }

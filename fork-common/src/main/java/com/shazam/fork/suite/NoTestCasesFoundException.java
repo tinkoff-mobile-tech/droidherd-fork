@@ -10,7 +10,7 @@
 
 package com.shazam.fork.suite;
 
-public class NoTestCasesFoundException extends Exception {
+public class NoTestCasesFoundException extends RuntimeException {
     public NoTestCasesFoundException(String message) {
         super(message);
     }

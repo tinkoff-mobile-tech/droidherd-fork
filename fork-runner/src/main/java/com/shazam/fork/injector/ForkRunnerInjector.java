@@ -12,10 +12,16 @@
  */
 package com.shazam.fork.injector;
 
+import com.shazam.fork.Configuration;
+import com.shazam.fork.DroidherdForkRunner;
 import com.shazam.fork.ForkRunner;
+import com.shazam.fork.ForkRunnerInterface;
+import com.shazam.fork.injector.system.DroidherdClientInjector;
+import com.shazam.fork.suite.TestsLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.shazam.fork.injector.ConfigurationInjector.configuration;
 import static com.shazam.fork.injector.aggregator.AggregatorInjector.aggregator;
 import static com.shazam.fork.injector.pooling.PoolLoaderInjector.poolLoader;
 import static com.shazam.fork.injector.runner.PoolTestRunnerFactoryInjector.poolTestRunnerFactory;
@@ -33,18 +39,23 @@ public class ForkRunnerInjector {
     private ForkRunnerInjector() {
     }
 
-    public static ForkRunner forkRunner() {
+    public static ForkRunnerInterface forkRunner() {
         long startNanos = nanoTime();
 
-        ForkRunner forkRunner = new ForkRunner(
+        Configuration configuration = configuration();
+        TestsLoader testsLoader = testSuiteLoader();
+        ForkRunnerInterface forkRunner = new ForkRunner(
                 poolLoader(),
-                testSuiteLoader(),
+                testsLoader,
                 poolTestRunnerFactory(),
                 progressReporterFactory(),
                 summaryGeneratorHook(),
                 outcomeAggregator(),
                 aggregator()
         );
+        if (configuration.getDroidherdConfig().isConfigured()) {
+            forkRunner = new DroidherdForkRunner(forkRunner, DroidherdClientInjector.clientInstance(), testsLoader);
+        }
 
         logger.debug("Bootstrap of ForkRunner took: {} milliseconds", millisSinceNanoTime(startNanos));
 

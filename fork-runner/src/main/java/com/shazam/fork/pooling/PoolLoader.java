@@ -12,10 +12,9 @@ package com.shazam.fork.pooling;
 
 import com.shazam.fork.Configuration;
 import com.shazam.fork.PoolingStrategy;
-import com.shazam.fork.device.DeviceLoader;
+import com.shazam.fork.device.DeviceLoaderInterface;
 import com.shazam.fork.model.Devices;
 import com.shazam.fork.model.Pool;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +24,10 @@ import static java.lang.String.format;
 
 public class PoolLoader {
     private static final Logger logger = LoggerFactory.getLogger(PoolLoader.class);
-    private final DeviceLoader deviceLoader;
+    private final DeviceLoaderInterface deviceLoader;
     private final Configuration configuration;
 
-    public PoolLoader(DeviceLoader deviceLoader, Configuration configuration) {
+    public PoolLoader(DeviceLoaderInterface deviceLoader, Configuration configuration) {
         this.deviceLoader = deviceLoader;
         this.configuration = configuration;
     }

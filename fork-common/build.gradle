@@ -19,6 +19,7 @@ targetCompatibility = rootProject.sourceCompatibility
 
 dependencies {
     implementation(
+            project(":droidherd-client"),
             "com.android.tools:common:$ddmlibVersion",
             "com.android.tools.ddms:ddmlib:$ddmlibVersion",
             "commons-io:commons-io:$commonsIoVersion",
