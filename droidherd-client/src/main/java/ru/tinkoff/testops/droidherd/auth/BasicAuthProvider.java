@@ -1,5 +1,6 @@
 package ru.tinkoff.testops.droidherd.auth;
 
+import java.util.Base64;
 import java.util.Optional;
 
 public class BasicAuthProvider implements AuthProvider {
@@ -20,9 +21,9 @@ public class BasicAuthProvider implements AuthProvider {
             }
         };
         this.clientId = Optional.ofNullable(System.getenv("DROIDHERD_CLIENT_ID"))
-                .orElse("fork_default");
+                .orElse("droidherd-default");
         this.token = Optional.ofNullable(System.getenv("DROIDHERD_AUTH_TOKEN"))
-                .orElse("");
+                .orElse("Basic " + Base64.getEncoder().encodeToString(String.format("%s:", clientId).getBytes()));
     }
 
     @Override

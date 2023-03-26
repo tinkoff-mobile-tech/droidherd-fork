@@ -462,7 +462,15 @@ public class Configuration implements ForkConfiguration {
             poolingStrategy = validatePoolingStrategy(poolingStrategy);
             applicationInfo = ApplicationInfoFactory.parseFromFile(applicationApk);
             adbUsageType = assignValueOrDefaultIfNull(adbUsageType, AdbInterface.Type.Droidherd);
-            return new Configuration(this, createDroidherdConfig());
+            DroidherdConfig droidherdConfig  = createDroidherdConfig();
+            if (droidherdConfig.isConfigured()) {
+                // override pool strategy which will be run per device by default
+                poolingStrategy = new PoolingStrategy();
+                poolingStrategy.computed = new ComputedPooling();
+                poolingStrategy.computed.characteristic = ComputedPooling.Characteristic.sw;
+                poolingStrategy.computed.groups = Collections.singletonMap("phones", 0);
+            }
+            return new Configuration(this, droidherdConfig);
         }
 
         private DroidherdConfig createDroidherdConfig() {

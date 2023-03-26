@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ForkCli local run template" type="Application" factoryName="Application">
+    <envs>
+      <env name="ANDROID_SDK_PATH" value="${ANDROID_HOME}" />
+      <env name="FORK_APP_APK_PATH" value="" />
+      <env name="FORK_TEST_APK_PATH" value="" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.shazam.fork.ForkCli" />
+    <module name="tinkoff-mobile-tech-fork.fork-runner.main" />
+    <option name="PROGRAM_PARAMETERS" value="--apk ${FORK_APP_APK_PATH} --test-apk ${FORK_TEST_APK_PATH} --config fork-runner/src/test/resources/droidherd-local-run-config.json --sdk ${ANDROID_SDK_PATH}" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.shazam.fork.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -106,15 +106,15 @@ public class ForkConfigurationExtension {
 
     public String adbUsageType;
 
-    public Integer minimumRequiredEmulators;
+    public Integer droidherdMinimumRequiredEmulators;
 
-    public String emulatorParameters;
+    public String droidherdEmulatorParameters;
 
     public String droidherdAuthProviderType;
 
-    public String emulators;
+    public String droidherdEmulators;
 
-    public String emulatorFarmEndpoint;
+    public String droidherdUrl;
 
     public void poolingStrategy(Closure<?> poolingStrategyClosure) {
         poolingStrategy = new PoolingStrategy();

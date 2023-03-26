@@ -34,7 +34,7 @@ class DroidherdClient(
         }
     }
     private val implementationVersion: String = javaClass.`package`.implementationVersion ?: "UNKNOWN"
-    private var pinger = DroidherdPinger(droidherdApi)
+    private var pinger: DroidherdPinger = DroidherdPinger(droidherdApi)
 
     @Volatile
     private var loginSuccess = false
@@ -95,7 +95,9 @@ class DroidherdClient(
 
         loginSuccess = true
         Runtime.getRuntime().addShutdownHook(releaseSessionShutdownHook)
-        pinger.start()
+        pinger = DroidherdPinger(droidherdApi).apply {
+            start()
+        }
 
         requestEmulators(testCasesCount)
 

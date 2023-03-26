@@ -30,7 +30,7 @@ First, you need to add a build-script dependency. You can have access to snapsho
 ```gradle
 buildscript {
   dependencies {
-    classpath 'com.shazam.fork:fork-gradle-plugin:3.16.0'
+    classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:1.0.0-3.16'
   }
 }
 ```
@@ -42,14 +42,14 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
   }
   dependencies {
-    classpath 'com.shazam.fork:fork-gradle-plugin:3.17.0-SNAPSHOT
+    classpath 'com.shazam.fork:fork-gradle-plugin:DEV-SNAPSHOT
   }
 }
 ```
 
 Apply the Fork plugin
 ```gradle
-apply plugin: 'com.shazam.fork'
+apply plugin: 'ru.tinkoff.testops.droidherd.fork'
 ```
 
 You're now done. If you had any instrumentation test tasks before, the plugin has added Fork tasks. You can verify by running:
@@ -75,6 +75,18 @@ fork {
 }
 ```
 *Note*: The testPackage property refers to the base package name which your tests reside in.  If you have tests in multiple packages, provide the most common ancestor. 
+
+# Run tests on emulators with DroidHerd
+
+To run tests using droidherd pass required parameters like service URL and required count of emulators:
+```bash
+./gradlew --no-daemon fork \
+  -Pfork.droidherd.url="${DROIDHERD_SERVICE_URL}" \
+  -Pfork.droidherd.emulators="android-29:1,android-30:1"
+```
+
+*Note*: pool strategy configuration will be ignored - tests will be run on random emulator.
+If you need to run each test on different android version - just setup several runs with required emulator version. 
 
 ### Standalone
 Check out the Fork project and execute:
