@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 def isReleaseBuild() {
-    return VERSION_NAME.contains("SNAPSHOT") == false
+    return BUILD_VERSION.contains("SNAPSHOT") == false
 }
 
 def getReleaseRepositoryUrl() {
@@ -50,7 +50,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = GROUP
                 artifactId = POM_ARTIFACT_ID
-                version = VERSION_NAME
+                version = BUILD_VERSION
 
                 from(project.components.java)
 
