@@ -45,6 +45,10 @@ public class Adb implements AdbInterface {
         return Arrays.asList(bridge.getDevices());
     }
 
+    public void terminate() {
+        AndroidDebugBridge.terminate();
+    }
+
     private void sleep(int sleepTime) {
         try {
             Thread.sleep(sleepTime);
