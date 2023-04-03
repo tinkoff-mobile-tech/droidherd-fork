@@ -76,18 +76,6 @@ fork {
 ```
 *Note*: The testPackage property refers to the base package name which your tests reside in.  If you have tests in multiple packages, provide the most common ancestor. 
 
-# Run tests on emulators with DroidHerd
-
-To run tests using droidherd pass required parameters like service URL and required count of emulators:
-```bash
-./gradlew --no-daemon fork \
-  -Pfork.droidherd.url="${DROIDHERD_SERVICE_URL}" \
-  -Pfork.droidherd.emulators="android-29:1,android-30:1"
-```
-
-*Note*: pool strategy configuration will be ignored - tests will be run on random emulator.
-If you need to run each test on different android version - just setup several runs with required emulator version. 
-
 ### Standalone
 Check out the Fork project and execute:
 
