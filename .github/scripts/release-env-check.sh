@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Checking repository [$GITHUB_REPOSITORY]..."
-[[ "${GITHUB_REPOSITORY}" != "tinkoff-mobile-tech/fork" ]] && exit 1
+[[ "${GITHUB_REPOSITORY}" != "tinkoff-mobile-tech/droidherd-fork" ]] && exit 1
 
 echo "Checking that ref type is tag ..."
 [[ "${GITHUB_REF_TYPE}" != "tag" ]] && exit 1
