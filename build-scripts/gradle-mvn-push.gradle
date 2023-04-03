@@ -86,7 +86,7 @@ afterEvaluate {
     }
 
     signing {
-        required { isReleaseBuild() && !isCI() }
+        required false
         sign publishing.publications.release
     }
 }

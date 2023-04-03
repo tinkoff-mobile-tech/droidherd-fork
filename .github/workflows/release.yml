@@ -7,8 +7,8 @@ on:
 #    types: [created, workflow_dispatch]
 
 env:
-  MVN_LOGIN: ${{ secrets.NEXUS_LOGIN }}
-  MVN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+  NEXUS_USERNAME: ${{ secrets.NEXUS_LOGIN }}
+  NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
   DOCKER_REPOSITORY: ${{secrets.DOCKER_REPOSITORY}}
   IMAGE_NAME: droidherd-fork
   MY_GITHUB_REF_NAME: "release-0.0.1"
