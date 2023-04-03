@@ -1,8 +1,10 @@
 name: Release droidherd-fork
 
 on:
-  release:
-    types: [created, workflow_dispatch]
+  - push
+
+#  release:
+#    types: [created, workflow_dispatch]
 
 env:
   MVN_LOGIN: ${{ secrets.NEXUS_LOGIN }}
