@@ -41,7 +41,7 @@ public class DroidherdConfig {
                 .add("minimumRequiredEmulators=" + minimumRequiredEmulators)
                 .add("authProvider=" + authProvider)
                 .add("emulators=" + emulators)
-                .add("emulatorFarmEndpoint='" + serviceUrl + "'")
+                .add("serviceUrl='" + serviceUrl + "'")
                 .toString();
     }
 

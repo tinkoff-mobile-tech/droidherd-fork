@@ -14,13 +14,7 @@
 
 package com.shazam.fork.device;
 
-import com.android.ddmlib.AdbCommandRejectedException;
-import com.android.ddmlib.IDevice;
-import com.android.ddmlib.NullOutputReceiver;
-import com.android.ddmlib.ScreenRecorderOptions;
-import com.android.ddmlib.ShellCommandUnresponsiveException;
-import com.android.ddmlib.SyncException;
-import com.android.ddmlib.TimeoutException;
+import com.android.ddmlib.*;
 import com.android.ddmlib.testrunner.TestIdentifier;
 import com.shazam.fork.model.Device;
 import org.slf4j.Logger;
@@ -135,6 +129,16 @@ public class ScreenRecorderImpl implements ScreenRecorder {
                 logger.error("Failed to remove a video file", e);
             }
         });
+    }
+
+    @Override
+    public void gracefulShutdown() {
+        logger.info("Waiting for file executor pull all files ...");
+        try {
+            fileExecutor.awaitTermination(10, SECONDS);
+        } catch (InterruptedException e) {
+            logger.error("Failed to wait termination to pull files", e);
+        }
     }
 
     private void pullTestVideo(String remoteFilePath, File output) throws IOException,

@@ -1,5 +1,5 @@
 {
-  "title": "Fork emulators report",
+  "title": "DroidHerd fork report",
   "subtitle": "",
   "poolingStrategy": {
     "computed": {
@@ -10,8 +10,6 @@
     }
   },
   "testPackage": "",
-  "testPackageAndClassRegex": "",
-  "additionalApks": "",
   "baseOutputDir": "result",
   "isCoverageEnabled": false,
   "isScreenRecordEnabled": false,
@@ -23,7 +21,7 @@
   "ignoreFailures": false,
   "adbUsageType" : "Droidherd",
   "droidherdAuthProviderType": "BasicAuthProvider",
-  "droidherdUrl": "http://localhost:32690",
+  "droidherdUrl": "http://localhost:8080",
   "droidherdMinimumRequiredEmulators": 1,
   "droidherdEmulators": "android-30:1,android-29:1",
   "droidherdEmulatorParameters": ""

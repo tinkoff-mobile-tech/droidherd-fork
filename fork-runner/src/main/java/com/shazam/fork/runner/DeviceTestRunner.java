@@ -13,11 +13,11 @@
 package com.shazam.fork.runner;
 
 import com.android.ddmlib.*;
-import com.shazam.fork.model.Device;
-import com.shazam.fork.model.*;
 import com.shazam.fork.device.ScreenRecorder;
+import com.shazam.fork.model.Device;
+import com.shazam.fork.model.Pool;
+import com.shazam.fork.model.TestCaseEvent;
 import com.shazam.fork.system.adb.Installer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +83,7 @@ public class DeviceTestRunner implements Runnable {
             logger.info("Device {} from pool {} finished", device.getSerial(), pool.getName());
             deviceCountDownLatch.countDown();
         }
+        screenRecorder.gracefulShutdown();
     }
 
     private void clearLogcat(final IDevice device) {

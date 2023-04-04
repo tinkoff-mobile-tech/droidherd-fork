@@ -30,4 +30,10 @@ public class BasicAuthProvider implements AuthProvider {
     public DroidherdAuthData get() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return BasicAuthProvider.class.getSimpleName();
+    }
+
 }

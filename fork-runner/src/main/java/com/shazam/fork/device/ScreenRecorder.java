@@ -26,4 +26,6 @@ public interface ScreenRecorder {
     void saveScreenRecording(TestIdentifier test, File output);
 
     void removeScreenRecording(TestIdentifier test);
+
+    void gracefulShutdown();
 }
