@@ -9,7 +9,8 @@ on:
 env:
   NEXUS_USERNAME: ${{ secrets.NEXUS_LOGIN }}
   NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-  IMAGE_NAME: droidherd-fork
+  DOCKER_REPOSITORY: ${{secrets.DOCKER_REPOSITORY}}
+  DOCKER_IMAGE_NAME: droidherd-fork
   MY_GITHUB_REF_NAME: "release-0.0.1"
 
 jobs:
