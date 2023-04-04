@@ -13,18 +13,29 @@
 package com.shazam.fork;
 
 import com.android.ddmlib.testrunner.IRemoteAndroidTestRunner;
+import com.google.common.base.Supplier;
+import com.shazam.fork.system.adb.AdbInterface;
 import com.shazam.fork.system.axmlparser.ApplicationInfo;
 import com.shazam.fork.system.axmlparser.ApplicationInfoFactory;
 import com.shazam.fork.system.axmlparser.InstrumentationInfo;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.tinkoff.testops.droidherd.DroidherdConfig;
+import ru.tinkoff.testops.droidherd.auth.AuthProvider;
+import ru.tinkoff.testops.droidherd.auth.AuthProviderCreator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -51,12 +62,17 @@ public class Configuration implements ForkConfiguration {
     private final int totalAllowedRetryQuota;
     private final int retryPerTestCaseQuota;
     private final boolean isCoverageEnabled;
+    private final Map<String, String> instrumentationArgs;
     private final PoolingStrategy poolingStrategy;
     private final boolean autoGrantPermissions;
     private final String excludedAnnotation;
     private final ApplicationInfo applicationInfo;
+    private final AdbInterface.Type adbUsageType;
+    private final DroidherdConfig droidherdConfig;
 
-    private Configuration(Builder builder) {
+    private Configuration(Builder builder, DroidherdConfig droidherdConfig) {
+        instrumentationArgs = builder.instrumentationArgs;
+        adbUsageType = builder.adbUsageType;
         androidSdk = builder.androidSdk;
         applicationApk = builder.applicationApk;
         instrumentationApk = builder.instrumentationApk;
@@ -78,6 +94,7 @@ public class Configuration implements ForkConfiguration {
         autoGrantPermissions = builder.autoGrantPermissions;
         this.excludedAnnotation = builder.excludedAnnotation;
         this.applicationInfo = builder.applicationInfo;
+        this.droidherdConfig = droidherdConfig;
     }
 
     @Override
@@ -198,6 +215,48 @@ public class Configuration implements ForkConfiguration {
         return applicationInfo;
     }
 
+    public Map<String, String> getInstrumentationArgs() {
+        return instrumentationArgs;
+    }
+
+    public AdbInterface.Type getAdbUsageType() {
+        return adbUsageType;
+    }
+
+    public DroidherdConfig getDroidherdConfig() {
+        return droidherdConfig;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("androidSdk", androidSdk)
+                .append("applicationApk", applicationApk)
+                .append("instrumentationApk", instrumentationApk)
+                .append("applicationPackage", applicationPackage)
+                .append("instrumentationPackage", instrumentationPackage)
+                .append("testRunnerClass", testRunnerClass)
+                .append("output", output)
+                .append("title", title)
+                .append("subtitle", subtitle)
+                .append("testClassPattern", testClassPattern)
+                .append("testPackage", testPackage)
+                .append("testOutputTimeout", testOutputTimeout)
+                .append("testSize", testSize)
+                .append("excludedSerials", excludedSerials)
+                .append("totalAllowedRetryQuota", totalAllowedRetryQuota)
+                .append("retryPerTestCaseQuota", retryPerTestCaseQuota)
+                .append("isCoverageEnabled", isCoverageEnabled)
+                .append("poolingStrategy", poolingStrategy)
+                .append("autoGrantPermissions", autoGrantPermissions)
+                .append("excludedAnnotation", excludedAnnotation)
+                .append("applicationInfo", applicationInfo)
+                .append("instrumentationArgs", instrumentationArgs)
+                .append("adbUsageType", adbUsageType)
+                .append("droidherdConfig", droidherdConfig)
+                .toString();
+    }
+
     public static class Builder {
         private File androidSdk;
         private File applicationApk;
@@ -220,6 +279,15 @@ public class Configuration implements ForkConfiguration {
         private boolean autoGrantPermissions;
         private String excludedAnnotation;
         private ApplicationInfo applicationInfo;
+        private String clientType;
+        private Map<String, String> instrumentationArgs;
+        private Map<String, String> emulatorParameters;
+        private AdbInterface.Type adbUsageType;
+        private Integer minimumRequiredEmulators;
+        private String droidherdAuthProviderType;
+        private AuthProvider droidherdAuthProvider;
+        private Map<String, Integer> emulators;
+        private String emulatorFarmEndpoint;
 
         public static Builder configuration() {
             return new Builder();
@@ -310,6 +378,61 @@ public class Configuration implements ForkConfiguration {
             return this;
         }
 
+        public Builder withClientType(String type) {
+            this.clientType = type;
+            return this;
+        }
+
+        public Builder withInstrumentationArgs(String instrumentationArgs) {
+            this.instrumentationArgs = StringUtils.isBlank(instrumentationArgs)
+                    ? Collections.emptyMap()
+                    : Arrays.stream(instrumentationArgs.split(","))
+                    .map(it -> it.split(":"))
+                    .collect(Collectors.toMap(it -> it[0].trim(), it -> it[1]));
+            return this;
+        }
+
+        public Builder withEmulatorParameters(String parameters) {
+            this.emulatorParameters = StringUtils.isBlank(parameters)
+                    ? Collections.emptyMap()
+                    : Arrays.stream(parameters.split(","))
+                    .map(it -> it.split(":"))
+                    .collect(Collectors.toMap(it -> it[0].trim(), it -> it[1]));
+            return this;
+        }
+
+        public Builder withAdbUsageType(String value) {
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(value)) {
+                adbUsageType = AdbInterface.Type.valueOf(value);
+            }
+            return this;
+        }
+
+        public Builder withMinimumRequiredEmulators(Integer minimumRequiredEmulators) {
+            this.minimumRequiredEmulators = minimumRequiredEmulators;
+            return this;
+        }
+
+        public Builder withDroidherdAuthProviderType(String droidherdAuthType) {
+            this.droidherdAuthProviderType = droidherdAuthType;
+            return this;
+        }
+
+        public Builder withEmulators(String emulators) {
+            this.emulators = StringUtils.isBlank(emulators)
+                    ? null
+                    : Arrays.stream(emulators.split(","))
+                    .map(it -> it.split(":"))
+                    .collect(Collectors.toMap(it -> it[0].trim(), it -> Integer.valueOf(it[1])));
+
+            return this;
+        }
+
+        public Builder withEmulatorFarmEndpoint(String emulatorFarmEndpoint) {
+            this.emulatorFarmEndpoint = emulatorFarmEndpoint;
+            return this;
+        }
+
         public Configuration build() {
             checkNotNull(androidSdk, "SDK is required.");
             checkArgument(androidSdk.exists(), "SDK directory does not exist.");
@@ -338,11 +461,50 @@ public class Configuration implements ForkConfiguration {
             logArgumentsBadInteractions();
             poolingStrategy = validatePoolingStrategy(poolingStrategy);
             applicationInfo = ApplicationInfoFactory.parseFromFile(applicationApk);
-            return new Configuration(this);
+            adbUsageType = assignValueOrDefaultIfNull(adbUsageType, AdbInterface.Type.Droidherd);
+            DroidherdConfig droidherdConfig  = createDroidherdConfig();
+            if (droidherdConfig.isConfigured()) {
+                // override pool strategy which will be run per device by default
+                poolingStrategy = new PoolingStrategy();
+                poolingStrategy.computed = new ComputedPooling();
+                poolingStrategy.computed.characteristic = ComputedPooling.Characteristic.sw;
+                poolingStrategy.computed.groups = Collections.singletonMap("phones", 0);
+            }
+            return new Configuration(this, droidherdConfig);
+        }
+
+        private DroidherdConfig createDroidherdConfig() {
+            if (StringUtils.isBlank(emulatorFarmEndpoint)) {
+                logger.info("Emulators endpoint not defined. Running on physical devices.");
+                return new DroidherdConfig();
+            }
+            String authProvider = droidherdAuthProviderType == null
+                    ? System.getenv("DROIDHERD_AUTH_PROVIDER")
+                    : droidherdAuthProviderType;
+            String path = (authProvider == null || authProvider.contains(".") ? authProvider : "ru.tinkoff.testops.droidherd.auth." + authProvider);
+            droidherdAuthProvider = AuthProviderCreator.create(path);
+            emulators = assignValueOrDefaultIfNull(emulators, () -> { throw new RuntimeException("emulators parameter not set"); });
+            minimumRequiredEmulators = assignValueOrDefaultIfZero(minimumRequiredEmulators, 1);
+            checkArgument(emulators.size() > 0, "No emulators specified");
+            int totalAmountOfEmulators = emulators.values().stream().mapToInt(it -> it).sum();
+            logger.info("Amount of emulators - " + totalAmountOfEmulators);
+            checkArgument(totalAmountOfEmulators >= minimumRequiredEmulators, "Required emulators cannot be less then minimum");
+            emulatorParameters = assignValueOrDefaultIfNull(emulatorParameters, Collections.emptyMap());
+            return new DroidherdConfig(
+                    clientType, emulatorParameters, minimumRequiredEmulators, droidherdAuthProvider, emulators, emulatorFarmEndpoint
+            );
+        }
+
+        private static String assignValueOrDefaultIfEmpty(String value, String defaultValue) {
+            return StringUtils.isNotBlank(value) ? value : defaultValue;
         }
 
         private static <T> T assignValueOrDefaultIfNull(T value, T defaultValue) {
             return value != null ? value : defaultValue;
+        }
+
+        private static <T> T assignValueOrDefaultIfNull(T value, Supplier<T> supplier) {
+            return value != null ? value : supplier.get();
         }
 
         private static <T extends Number> T assignValueOrDefaultIfZero(T value, T defaultValue) {

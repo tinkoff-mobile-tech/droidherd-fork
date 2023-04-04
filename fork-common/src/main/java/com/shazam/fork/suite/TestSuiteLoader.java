@@ -12,7 +12,6 @@ package com.shazam.fork.suite;
 
 import com.shazam.fork.io.DexFileExtractor;
 import com.shazam.fork.model.TestCaseEvent;
-
 import org.jf.dexlib2.iface.Annotation;
 import org.jf.dexlib2.iface.AnnotationElement;
 import org.jf.dexlib2.iface.ClassDef;
@@ -24,7 +23,6 @@ import org.jf.dexlib2.iface.value.StringEncodedValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +37,7 @@ import static com.shazam.fork.model.TestCaseEvent.Builder.testCaseEvent;
 import static java.lang.Math.min;
 import static java.util.stream.Collectors.toList;
 
-public class TestSuiteLoader {
+public class TestSuiteLoader implements TestsLoader {
     private static final String TEST_ANNOTATION = "Lorg/junit/Test;";
     private static final String IGNORE_ANNOTATION = "Lorg/junit/Ignore;";
     private static final String REVOKE_PERMISSION_ANNOTATION = "Lcom/shazam/fork/RevokePermission;";

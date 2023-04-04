@@ -1,7 +1,7 @@
 jar {
     manifest {
         attributes 'Implementation-Title': POM_NAME,
-                'Implementation-Version': VERSION_NAME,
+                'Implementation-Version': project.getVersion().toString(),
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),

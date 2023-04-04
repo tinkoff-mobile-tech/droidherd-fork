@@ -12,11 +12,13 @@ package com.shazam.fork.device;
 import com.android.ddmlib.IDevice;
 import com.shazam.fork.model.Device;
 import com.shazam.fork.model.Devices;
-import com.shazam.fork.system.adb.Adb;
-
-import java.util.*;
+import com.shazam.fork.system.adb.AdbInterface;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import static com.shazam.fork.model.Device.Builder.aDevice;
 import static com.shazam.fork.model.Devices.Builder.devices;
@@ -24,12 +26,12 @@ import static com.shazam.fork.model.Devices.Builder.devices;
 /**
  * Turns a serial number or an IDevice reference to a Device.
  */
-public class DeviceLoader {
-    private final Adb adb;
+public class DeviceLoader implements DeviceLoaderInterface {
+    private final AdbInterface adb;
     private final DeviceGeometryRetriever deviceGeometryRetriever;
     private final Collection<String> excludedSerials;
 
-    public DeviceLoader(Adb adb, DeviceGeometryRetriever deviceGeometryRetriever, Collection<String> excludedSerials) {
+    public DeviceLoader(AdbInterface adb, DeviceGeometryRetriever deviceGeometryRetriever, Collection<String> excludedSerials) {
         this.adb = adb;
         this.deviceGeometryRetriever = deviceGeometryRetriever;
         this.excludedSerials = excludedSerials;

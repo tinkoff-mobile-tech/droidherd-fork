@@ -12,7 +12,6 @@ package com.shazam.fork.system.adb;
 
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
-
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -22,13 +21,13 @@ import java.util.Collection;
 /**
  * @see "com.android.builder.testing.ConnectedDeviceProvider"
  */
-public class Adb {
+public class Adb implements AdbInterface {
     private final AndroidDebugBridge bridge;
 
     public Adb(File sdk) {
         AndroidDebugBridge.initIfNeeded(false /*clientSupport*/);
         File adbPath = FileUtils.getFile(sdk, "platform-tools", "adb");
-        bridge = AndroidDebugBridge.createBridge(adbPath.getAbsolutePath(), false /*forceNewBridge*/);
+        bridge = AndroidDebugBridge.createBridge(adbPath.getAbsolutePath(), true /*forceNewBridge*/);
         long timeOut = 30000; // 30 sec
         int sleepTime = 1000;
         while (!bridge.hasInitialDeviceList() && timeOut > 0) {
@@ -41,6 +40,7 @@ public class Adb {
         }
     }
 
+    @Override
     public Collection<IDevice> getDevices() {
         return Arrays.asList(bridge.getDevices());
     }
@@ -54,5 +54,10 @@ public class Adb {
             Thread.sleep(sleepTime);
         } catch (InterruptedException ignored) {
         }
+    }
+
+    @Override
+    public void restart() {
+        bridge.restart();
     }
 }

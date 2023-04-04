@@ -86,7 +86,15 @@ class ForkPlugin implements Plugin<Project> {
                 applicationApk = config.applicationApkName != null ?
                         getApkFileWithCustomName(variant.testedVariant as ApkVariant, config.applicationApkName) :
                         getApkFileFromPackageAndroidArtifact(variant.testedVariant as ApkVariant)
-
+                emulatorParameters = Optional.ofNullable(project.findProperty("fork.droidherd.emulator.parameters"))
+                        .orElse(config.droidherdEmulatorParameters)
+                minimumRequiredEmulators = Optional.ofNullable(config.droidherdMinimumRequiredEmulators).orElse(1)
+                adbUsageType = project.findProperty("fork.adbUsageType") ?: null
+                droidherdAuthProvider = project.findProperty("fork.droidherd.auth.provider") ?:
+                        (config.droidherdAuthProviderType ?: "BasicAuthProvider")
+                emulators = project.findProperty("fork.droidherd.emulators") ?: config.droidherdEmulators
+                emulatorFarmEndpoint = project.findProperty("fork.droidherd.url") ?:
+                        (config.droidherdUrl ?: null)
                 String baseOutputDir = config.baseOutputDir
                 File outputBase
                 if (baseOutputDir) {

@@ -17,12 +17,7 @@ import com.shazam.fork.Fork
 import com.shazam.fork.PoolingStrategy
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.VerificationTask
+import org.gradle.api.tasks.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -99,6 +94,24 @@ class ForkRunTask extends DefaultTask implements VerificationTask {
     @Optional
     String excludedAnnotation
 
+    @Internal
+    String emulatorParameters
+
+    @Internal
+    String adbUsageType
+
+    @Internal
+    Integer minimumRequiredEmulators
+
+    @Internal
+    String droidherdAuthProvider
+
+    @Internal
+    String emulators
+
+    @Internal
+    String emulatorFarmEndpoint
+
     @TaskAction
     void runFork() {
         LOG.info("Run instrumentation tests $instrumentationApk for app $applicationApk")
@@ -123,6 +136,13 @@ class ForkRunTask extends DefaultTask implements VerificationTask {
                 .withPoolingStrategy(poolingStrategy)
                 .withAutoGrantPermissions(autoGrantPermissions)
                 .withExcludedAnnotation(excludedAnnotation)
+                .withClientType("gradle-plugin")
+                .withDroidherdAuthProviderType(droidherdAuthProvider)
+                .withEmulatorParameters(emulatorParameters)
+                .withAdbUsageType(adbUsageType)
+                .withMinimumRequiredEmulators(minimumRequiredEmulators)
+                .withEmulators(emulators)
+                .withEmulatorFarmEndpoint(emulatorFarmEndpoint)
                 .build()
 
         boolean success = new Fork(configuration).run()

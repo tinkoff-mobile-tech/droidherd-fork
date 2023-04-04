@@ -10,6 +10,9 @@
 package com.shazam.fork.injector.device;
 
 import com.shazam.fork.device.DeviceLoader;
+import com.shazam.fork.device.DeviceLoaderInterface;
+import com.shazam.fork.device.DroidherdDeviceLoader;
+import com.shazam.fork.injector.system.DroidherdClientInjector;
 
 import static com.shazam.fork.injector.ConfigurationInjector.configuration;
 import static com.shazam.fork.injector.device.DeviceGeometryRetrieverInjector.deviceGeometryReader;
@@ -19,7 +22,10 @@ public class DeviceLoaderInjector {
 
     private DeviceLoaderInjector() {}
 
-    public static DeviceLoader deviceLoader() {
+    public static DeviceLoaderInterface deviceLoader() {
+        if (configuration().getDroidherdConfig().isConfigured()) {
+            return new DroidherdDeviceLoader(adb(), deviceGeometryReader(), DroidherdClientInjector.clientInstance());
+        }
         return new DeviceLoader(adb(), deviceGeometryReader(), configuration().getExcludedSerials());
     }
 }

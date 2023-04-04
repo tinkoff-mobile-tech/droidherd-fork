@@ -1,0 +1,31 @@
+{
+    "title": "DroidHerd fork report",
+    "subtitle": "",
+    "poolingStrategy": {
+        "computed": {
+            "characteristic": "sw",
+            "groups": {
+                "phones": 0
+            }
+        }
+    },
+    "testPackage": "${TEST_PACKAGE}",
+    "testClassRegex": "${TEST_CLASS}",
+    "baseOutputDir": "${OUTPUT_DIR}",
+    "isCoverageEnabled": ${COVERAGE_ENABLED},
+    "excludedAnnotation": "${EXCLUDED_ANNOTATIONS}",
+    "isScreenRecordEnabled": ${SCREENRECORD_ENABLED},
+    "instrumentationArgs": "${INSTRUMENTATION_ARGS}",
+    "testOutputTimeout": "${TEST_TIMEOUT}",
+    "autoGrantPermissions" : ${AUTO_GRANT_PERMISSIONS},
+    "totalAllowedRetryQuota": ${TOTAL_RETRIES},
+    "retryPerTestCaseQuota": ${RETRY_PER_TEST},
+    "ignoreFailures": ${IGNORE_FAILURES},
+    "filterAnnotations": "${ANNOTATION_FILTER}",
+    "adbUsageType" : "${ADB_USAGE_TYPE}",
+    "droidherdAuthProvider" : "${DROIDHERD_AUTH_PROVIDER}",
+    "droidherdEmulatorParameters": "${DROIDHERD_EMULATOR_PARAMETERS}",
+    "droidherdUrl": "${DROIDHERD_URL}",
+    "droidherdMinimumRequiredEmulators": ${DROIDHERD_MIN_EMULATORS},
+    "droidherdEmulators": "${DROIDHERD_EMULATORS}"
+}

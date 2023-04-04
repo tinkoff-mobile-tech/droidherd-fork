@@ -30,7 +30,7 @@ First, you need to add a build-script dependency. You can have access to snapsho
 ```gradle
 buildscript {
   dependencies {
-    classpath 'com.shazam.fork:fork-gradle-plugin:3.16.0'
+    classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:1.0.0-3.16'
   }
 }
 ```
@@ -42,14 +42,14 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
   }
   dependencies {
-    classpath 'com.shazam.fork:fork-gradle-plugin:3.17.0-SNAPSHOT
+    classpath 'com.shazam.fork:fork-gradle-plugin:DEV-SNAPSHOT
   }
 }
 ```
 
 Apply the Fork plugin
 ```gradle
-apply plugin: 'com.shazam.fork'
+apply plugin: 'ru.tinkoff.testops.droidherd.fork'
 ```
 
 You're now done. If you had any instrumentation test tasks before, the plugin has added Fork tasks. You can verify by running:

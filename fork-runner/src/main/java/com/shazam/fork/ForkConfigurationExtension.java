@@ -9,9 +9,9 @@
  */
 package com.shazam.fork;
 
-import java.util.Collection;
-
 import groovy.lang.Closure;
+
+import java.util.Collection;
 
 /**
  * Fork extension.
@@ -103,6 +103,18 @@ public class ForkConfigurationExtension {
      * Filter test run to tests without given annotation
      */
     public String excludedAnnotation;
+
+    public String adbUsageType;
+
+    public Integer droidherdMinimumRequiredEmulators;
+
+    public String droidherdEmulatorParameters;
+
+    public String droidherdAuthProviderType;
+
+    public String droidherdEmulators;
+
+    public String droidherdUrl;
 
     public void poolingStrategy(Closure<?> poolingStrategyClosure) {
         poolingStrategy = new PoolingStrategy();

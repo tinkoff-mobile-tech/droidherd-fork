@@ -1,0 +1,36 @@
+FROM ubuntu:20.04
+ARG FORK_VERSION
+ARG ANDROID_SDK_TOOLS_LINK="https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip"
+
+RUN mkdir /opt/android-sdk && mkdir /root/.android
+
+WORKDIR /opt/android-sdk
+
+ENV LANGUAGE en_US.UTF-8
+ENV LANG en_US.UTF-8
+
+RUN \
+    apt-get update -qq && apt-get install -y --reinstall --no-install-recommends \
+    ca-certificates \
+    curl \
+    unzip \
+    gettext-base \
+    openjdk-11-jdk && \
+    curl $ANDROID_SDK_TOOLS_LINK -o platform-tools-linux.zip && \
+    unzip -q platform-tools-linux.zip && \
+    rm platform-tools-linux.zip && \
+    apt-get -y autoclean && apt-get -y autoremove
+
+ENV ANDROID_HOME="/opt/android-sdk"
+ENV PATH="/opt/android-sdk/platform-tools:${PATH}"
+
+COPY fork-runner/build/distributions/fork-runner-${FORK_VERSION}.zip fork.zip
+RUN unzip fork.zip && rm fork.zip && mv fork-runner-${FORK_VERSION} /opt/fork
+COPY docker/* /opt/fork/bin/
+RUN chmod +x /opt/fork/bin/run_fork.sh && chmod +x /opt/fork/bin/inject_config.sh
+
+ENV FORK_DIR=/opt/fork/bin
+ENV RUN_FORK_CMD=$FORK_DIR/run_fork.sh
+WORKDIR /opt/fork/bin
+
+CMD ["bash"]
