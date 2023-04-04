@@ -1,17 +1,14 @@
 name: Release droidherd-fork
 
 on:
-  - push
-
-#  release:
-#    types: [created, workflow_dispatch]
+  release:
+    types: [created, workflow_dispatch]
 
 env:
   NEXUS_USERNAME: ${{ secrets.NEXUS_LOGIN }}
   NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
   DOCKER_REPOSITORY: ${{secrets.DOCKER_REPOSITORY}}
   DOCKER_IMAGE_NAME: droidherd-fork
-  MY_GITHUB_REF_NAME: "release-0.0.1"
 
 jobs:
   build-and-release:
@@ -24,7 +21,7 @@ jobs:
 
       - name: Set build version
         run: |
-          echo "BUILD_VERSION=$(echo $MY_GITHUB_REF_NAME | grep -Eo '[0-9]\.[0-9]+\.[0-9]+')" >> $GITHUB_ENV
+          echo "BUILD_VERSION=$(echo $GITHUB_REF_NAME | grep -Eo '[0-9]\.[0-9]+\.[0-9]+')" >> $GITHUB_ENV
 
       - name: Show and check version
         run: |
@@ -71,7 +68,7 @@ jobs:
         run: |
           echo '${{ secrets.DOCKER_REPOSITORY_PASSWORD }}' | docker login -u $DOCKER_REPOSITORY --password-stdin
           docker build . --file ./OssDockerfile --build-arg FORK_VERSION=$BUILD_VERSION --tag $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME:$BUILD_VERSION
-          echo "docker push $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME:$BUILD_VERSION"
+          docker push $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME:$BUILD_VERSION
           docker tag $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME:$BUILD_VERSION $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME:latest
           echo "Update latest tag $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME"  
           docker push $DOCKER_REPOSITORY/$DOCKER_IMAGE_NAME:latest
