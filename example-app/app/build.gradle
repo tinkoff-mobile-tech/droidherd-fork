@@ -1,6 +1,8 @@
 buildscript {
     dependencies {
-        classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:0.0.1'
+        // uncomment to use SNAPSHOT version from local repo instead release version
+        // classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:DEV-SNAPSHOT'
+        classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:1.0.0'
     }
     repositories {
         mavenLocal()
