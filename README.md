@@ -30,7 +30,7 @@ First, you need to add a build-script dependency. You can have access to snapsho
 ```gradle
 buildscript {
   dependencies {
-    classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:1.0.0-3.16'
+    classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:1.0.0'
   }
 }
 ```
@@ -38,11 +38,10 @@ buildscript {
 ```gradle
 buildscript {
   repositories {
-    // other repos ...
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    mavenLocal() // build and deploy project to maven local repo
   }
   dependencies {
-    classpath 'com.shazam.fork:fork-gradle-plugin:DEV-SNAPSHOT
+    classpath 'ru.tinkoff.testops.droidherd:fork-gradle-plugin:DEV-SNAPSHOT
   }
 }
 ```
